@@ -1,6 +1,7 @@
 const Draw = require('../models/Draw');
 const Participant = require('../models/Participant');
 const shuffle = require('../lib/shuffle');
+const mailer = require('../lib/mailer');
 
 module.exports = {
     async access(req, res) {
@@ -24,6 +25,8 @@ module.exports = {
             }
         }
         await Participant.insertMany(shuffled);
+
+        mailer(shuffled, name);
 
         res.json({})
     }
