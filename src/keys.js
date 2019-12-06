@@ -10,7 +10,7 @@ module.exports = function () {
 			email: process.env.EMAIL,
 			password: process.env.EMAIL_PASSWORD
 		},
-		dbUrl: process.env.CLEARDB_DATABASE_URL,
+		dbUrl: process.env.MONGO_URL,
 		google: {
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_SECRET,
