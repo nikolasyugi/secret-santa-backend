@@ -1,0 +1,29 @@
+doctype html
+html
+    head
+        block head
+            meta(charset="utf-8")
+            meta(name="viewport", content="width=device-width")
+            meta(htpp-equiv="X-UA-Compatible", content="IE=edge")
+        style
+            include style.css
+            
+    body
+        #pageWrapper
+            img(src='clipart-library.com/images_k/cartoon-santa-hat-transparent/cartoon-santa-hat-transparent-17.png')
+            h1 Amigo secreto #{drawName}
+            p.normal
+                | Olá 
+                b #{name}! 
+                | Você está participando do sorteio de amigo secreto 
+                b #{drawName}. 
+                | Veja quem será o seu amigo secreto clicando no botão abaixo!
+            a(href=`${webUrl}friend?code=${code}` target='_blank')
+                button Visualizar amigo secreto
+            p.footer Caso seja necessário visualizar o seu amigo novamente, acesse o link 
+                a(href=`${webUrl}` target='_blank')
+                    | #{webUrl}
+                |  e utilize o código 
+                span #{code}
+                |  ou clique novamente no botão acima. 
+                b Não compartilhe esse código com seus amigos!

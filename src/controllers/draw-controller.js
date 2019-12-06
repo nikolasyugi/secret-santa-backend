@@ -1,7 +1,7 @@
 const Draw = require('../models/Draw');
 const Participant = require('../models/Participant');
 const shuffle = require('../lib/shuffle');
-const mailer = require('../lib/mailer');
+const mailer = require('../lib/emails/mailer');
 
 module.exports = {
     async access(req, res) {

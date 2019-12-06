@@ -11,7 +11,8 @@ const server = require('http').Server(app);
 // })
 
 mongoose.connect('mongodb://localhost/secret-santa', {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 })
 
 app.use(bodyParser.json());
