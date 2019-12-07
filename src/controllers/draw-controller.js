@@ -2,18 +2,22 @@ const Draw = require('../models/Draw');
 const Participant = require('../models/Participant');
 const shuffle = require('../lib/shuffle');
 const mailer = require('../lib/emails/mailer');
+const handle = require('../lib/errorHandling')().handle;
 
 module.exports = {
-    async access(req, res) {
-        const participant = await Participant.find({ code: req.body.code });
-        res.json(participant);
+    async access(req, res, next) {
+        const [participant, error] = await handle(Participant.findOne({ code: req.body.code }).orFail());
+
+        if (error) next(error);
+        else res.json(participant);
     },
 
-    async draw(req, res) {
+    async draw(req, res, next) {
         const { name, participants } = req.body;
         const shuffled = shuffle(participants);
 
-        const draw = await Draw.create({ name: name });
+        const [draw, drawErr] = await handle(Draw.create({ name: name }));
+        if (drawErr) return next(drawErr);
 
         for (let i = shuffled.length - 1; i >= 0; i--) {
             shuffled[i].draw = draw._id;
@@ -24,7 +28,8 @@ module.exports = {
                 shuffled[i].friend = shuffled[0].name;
             }
         }
-        await Participant.insertMany(shuffled);
+        const [, ptErr] = await handle(Participant.insertMany(shuffled));
+        if (ptErr) return next(ptErr);
 
         mailer(shuffled, name);
 
