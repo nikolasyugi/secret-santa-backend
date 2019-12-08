@@ -1,0 +1,189 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Secret Santa API",
+        "description": "A secret santa backend project developed using Node.js",
+        "contact": {
+            "name": "Nikolas Athanasopoulos",
+            "url": "https://github.com/nikolasyugi",
+            "email": "nikolas.yugi@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3333",
+            "description": "Development server"
+        },
+        {
+            "url": "https://amigo-secreto-backend.herokuapp.com",
+            "description": "Production server"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Draw",
+            "description": "API for the draws"
+        }
+    ],
+    "paths": {
+        "/access": {
+            "post": {
+                "tags": [
+                    "Draw"
+                ],
+                "summary": "Access already generated draw",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "body",
+                        "required": true,
+                        "description": "draw code",
+                        "type": "string",
+                        "example": {
+                            "code": "c8a7006c3b16b"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Draw was found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Participant"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Draw not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/draw": {
+            "parameters": [
+                {
+                    "name": "name",
+                    "in": "body",
+                    "required": true,
+                    "description": "Name of the draw",
+                    "type": "string",
+                    "example": {
+                        "name": "My draw"
+                    }
+                },
+                {
+                    "name": "participants",
+                    "in": "body",
+                    "required": true,
+                    "description": "Array of participants",
+                    "type": "array",
+                    "example": {
+                        "participants": [
+                            {
+                                "name": "john",
+                                "email": "john@gmail.com"
+                            },
+                            {
+                                "name": "foo",
+                                "email": "foo@gmail.com"
+                            },
+                            {
+                                "name": "tha",
+                                "email": "bar@gmail.com"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "post": {
+                "tags": [
+                    "Draw"
+                ],
+                "summary": "Create new draw",
+                "responses": {
+                    "200": {
+                        "description": "Draw is created and e-mail is sent to all participants"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Draw": {
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "uniqueItems": true
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Participant": {
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "uniqueItems": true
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "uniqueItems": true
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "friend": {
+                        "type": "string"
+                    },
+                    "Draw": {
+                        "$ref": "#/components/schemas/Draw"
+                    }
+                }
+            }
+        }
+    }
+}

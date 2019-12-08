@@ -4,10 +4,14 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const errorHandling = require('./lib/errorHandling')();
+const swaggerUi = require('swagger-ui-express');
 
 const app = express();
 const server = require('http').Server(app);
 const mongo_uri = require('./keys')().dbUrl;
+
+const swaggerDocument = require('./swagger.json');
+app.use('/apidocs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 mongoose.connect(mongo_uri, {
     useNewUrlParser: true,
