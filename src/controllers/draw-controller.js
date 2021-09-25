@@ -34,7 +34,7 @@ module.exports = {
             shuffled[i].vars = {}
             shuffled[i].vars.drawName = name
             shuffled[i].vars.code = shuffled[i].code
-            shuffled[i].vars.name = shuffled[i].friend
+            shuffled[i].vars.name = shuffled[i].name
 
         }
         const [, ptErr] = await handle(Participant.insertMany(shuffled));
