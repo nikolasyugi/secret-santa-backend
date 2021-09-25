@@ -1,37 +1,52 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const morgan = require('morgan');
+
+const keys = require('./keys')();
 const errorHandling = require('./lib/errorHandling')();
-const swaggerUi = require('swagger-ui-express');
 
 const app = express();
 const server = require('http').Server(app);
-const mongo_uri = require('./keys')().dbUrl;
 
-const swaggerDocument = require('./swagger.json');
-app.use('/apidocs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
+/* MONGO */
+const mongo_uri = keys.dbUrl;
 mongoose.connect(mongo_uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useNewUrlParser: true
 })
+/* MONGO */
 
+/* GENERAL MODULES */
+app.use(helmet());
 app.use(morgan('combined'));
-app.use(bodyParser.json());
-app.use(cors())
-app.use(require('./routes'))
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
+/* GENERAL MODULES */
 
-app.use((req, res, next) => {
+/*CORS*/
+const corsSettings = require('./cors');
+app.use(cors(corsSettings));
+/*CORS*/
+
+/* ROUTES */
+app.use(require('./routes'))
+app.use('/*', (req, res, next) => {
     errorHandling.routeNotFound(next);
 });
+/* ROUTES */
 
+/* ERROR HANDLING */
 app.use((err, req, res, next) => {
     errorHandling.throwError(err, res)
 })
+/* ERROR HANDLING */
 
-server.listen(process.env.PORT || 3333, function () {
-    console.log(`Server listening on port ${process.env.PORT || 3333}`)
+
+server.listen(process.env.PORT || 8080, function () {
+    console.log(`Server listening on port ${process.env.PORT || 8080}`)
 });
-

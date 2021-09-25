@@ -11,19 +11,19 @@ html
     body
         #pageWrapper
             img(src='clipart-library.com/images_k/cartoon-santa-hat-transparent/cartoon-santa-hat-transparent-17.png')
-            h1 Amigo secreto #{drawName}
+            h1 Amigo secreto #{vars.drawName}
             p.normal
                 | Olá 
-                b #{name}! 
+                b #{vars.name}! 
                 | Você está participando do sorteio de amigo secreto 
-                b #{drawName}. 
+                b #{vars.drawName}. 
                 | Veja quem será o seu amigo secreto clicando no botão abaixo!
-            a(href=`${webUrl}friend?code=${code}` target='_blank')
+            a(href=`https://amigo-secreto-web.herokuapp.com/friend?code=${vars.code}` target='_blank')
                 button Visualizar amigo secreto
             p.footer Caso seja necessário visualizar o seu amigo novamente, acesse o link 
-                a(href=`${webUrl}` target='_blank')
-                    | #{webUrl}
+                a(href=`https://amigo-secreto-web.herokuapp.com/` target='_blank')
+                    | https://amigo-secreto-web.herokuapp.com/
                 |  e utilize o código 
-                span #{code}
+                span #{vars.code}
                 |  ou clique novamente no botão acima. 
                 b Não compartilhe esse código com seus amigos!
