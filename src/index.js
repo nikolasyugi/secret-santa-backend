@@ -14,7 +14,6 @@ const server = require('http').Server(app);
 const mongo_uri = keys.dbUrl;
 mongoose.connect(mongo_uri, {
     useUnifiedTopology: true,
-    useCreateIndex: true,
     useNewUrlParser: true
 })
 /* MONGO */
